@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+
+<script>
+    var socket;
+    // 判断流浪器是否支持websocket编程
+    if(window.WebSocket){
+        socket = new WebSocket("ws://localhost:7000/hello");
+        // 把服务器端回送的消息现实到浏览器上
+        socket.onmessage = function (ev) {
+            var rt = document.getElementById("responseText");
+            rt.value = rt.value + "\n" + ev.data;
+        }
+        // 链接开启触发
+        socket.onopen = function (ev) {
+            var rt = document.getElementById("responseText");
+            rt.value = "链接开启了...\n";
+        }
+        // 链接关闭触发
+        socket.onclose = function (ev) {
+            var rt = document.getElementById("responseText");
+            rt.value = "链接关闭...\n";
+        }
+    }else{
+        alert("当前流浪器不支持WebSocket编程")
+    }
+
+    function sendMsg(msg) {
+        // WebSocket 是否已经准备好
+        if (!window.WebSocket){
+            return;
+        }
+        if(socket.readyState == WebSocket.OPEN){
+            socket.send(msg);
+        }else{
+            alert("链接没有开启！")
+        }
+    }
+</script>
+<body>
+<form onsubmit="return false">
+    <textarea name="msg" style="height: 300px; width: 300px;"></textarea>
+    <input type="button" value="发送消息" onclick="sendMsg(this.form.msg.value)"/>
+    <textarea id="responseText" style="height: 300px; width: 300px;"></textarea>
+    <input type="button" value="清空内容" onclick="document.getElementById('responseText').value=''"/>
+</form>
+</body>
+</html>

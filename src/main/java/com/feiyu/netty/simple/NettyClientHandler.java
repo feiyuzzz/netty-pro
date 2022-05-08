@@ -8,7 +8,7 @@ import io.netty.util.CharsetUtil;
 
 /**
  * <p>
- *
+ *   客户端 Handler
  * </p>
  *
  * @author Eddie
@@ -27,7 +27,7 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
         System.out.println("服务器发送回复的消息："+byteBuf.toString(CharsetUtil.UTF_8));
-        System.out.println("服务器地址："+ctx.channel().remoteAddress());
+        //System.out.println("服务器地址："+ctx.channel().remoteAddress());
     }
 
     // 处理异常

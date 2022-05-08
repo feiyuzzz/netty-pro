@@ -1,10 +1,12 @@
-package com.feiyu.netty.simple;
+package com.feiyu.netty.codec2;
 
+import com.feiyu.netty.codec.StudentPojo;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
 
 /**
  * <p>
@@ -37,7 +39,10 @@ public class NettyServer {
                         // 给pipeline 设置处理器
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(new NettyServerHandler());
+                            ChannelPipeline pipeline = ch.pipeline();
+                            // 加入protobuf 解码器
+                            pipeline.addLast("decoder",new ProtobufDecoder(MessagePojo.Message.getDefaultInstance()));
+                            pipeline.addLast(new NettyServerHandler());
                         }
                     }); // 给我们的 workerGroup 的 EvenLoop 对应的管道设置处理器
 
